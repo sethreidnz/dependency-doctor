@@ -7,9 +7,15 @@
   "description": "Workspace for the Dependency Doctor project",
   "homepage": "https://github.com/sethreidnz/dependency-doctor#readme",
   "scripts": {
+    "build": "npm run mcp:build",
+    "dev": "npm run mcp:dev",
+    "start": "npm run mcp:start",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
-    "mcp:lint": "npm run -w @dependency-doctor/mcp lint",
-    "mcp:test": "npm run -w @dependency-doctor/mcp test"
+    "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
+    "mcp:start": "npm run -w @dependency-doctor/mcp start",
+    "mcp:test": "npm run -w @dependency-doctor/mcp test",
+    "mcp:typecheck": "tsc -p packages/dependency-doctor --noEmit",
+    "typecheck": "npm run mcp:typecheck"
   },
   "workspaces": [
     "packages/dependency-doctor"
@@ -24,7 +30,7 @@
   "engines": {
     "node": ">=22"
   },
-   "volta": {
+  "volta": {
     "node": "22.15.0"
   }
 }

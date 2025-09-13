@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "name": "@asi/workspace",
+      "path": "."
+    },
+    {
+      "name": "@dependency-doctore/mcp",
+      "path": "./packages/dependency-doctor"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "npm.packageManager": "npm",
+    "npm.runSilent": true
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "vitest.explorer",
+      "esbenp.prettier-vscode",
+      "stylelint.vscode-stylelint"
+    ]
+  }
+}
