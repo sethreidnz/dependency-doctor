@@ -1,6 +1,7 @@
 {
   "name": "@dependency-doctor/workspace",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "license": "MIT",
   "author": "sethreidnz",
@@ -10,10 +11,12 @@
     "build": "npm run mcp:build",
     "dev": "npm run mcp:dev",
     "start": "npm run mcp:start",
+    "lint": "npm run mcp:lint",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
     "mcp:start": "npm run -w @dependency-doctor/mcp start",
     "mcp:test": "npm run -w @dependency-doctor/mcp test",
+    "mcp:lint": "eslint packages/dependency-doctor --config packages/dependency-doctor/eslint.config.js --cache --cache-location .eslintcache",
     "mcp:typecheck": "tsc -p packages/dependency-doctor --noEmit",
     "typecheck": "npm run mcp:typecheck"
   },
@@ -32,5 +35,10 @@
   },
   "volta": {
     "node": "22.15.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
+    "eslint": "^9.35.0"
   }
 }

@@ -1,6 +1,7 @@
 {
   "name": "@dependency-doctor/mcp",
   "version": "0.1.0",
+  "type": "module",
   "description": "An xmcp application with tool syntax",
   "engines": {
     "node": ">=22.0.0"

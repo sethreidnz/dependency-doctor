@@ -2,8 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "rootDir": "./src",
     "outDir": "./dist"
   },
-  "include": ["xmcp-env.d.ts", "src/**/*.ts"]
+  "include": ["xmcp-env.d.ts", "xmcp.config.ts", "src/**/*.ts"]
 }
