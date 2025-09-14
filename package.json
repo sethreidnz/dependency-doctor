@@ -22,9 +22,9 @@
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
     "mcp:lint": "eslint packages/mcp --config packages/mcp/eslint.config.js --cache --cache-location .eslintcache",
     "mcp:start": "npm run -w @dependency-doctor/mcp start",
-    "mcp:test": "vitest --config packages/mcp/vitest.config.ts",
-    "mcp:test:ci": "vitest run --coverage --config packages/mcp/vitest.config.ts",
-    "mcp:test:ui": "vitest --ui --config packages/mcp/vitest.config.ts",
+    "mcp:test": "cd packages/mcp && npm test",
+    "mcp:test:ci": "cd packages/mcp && npm run test -- --run --coverage",
+    "mcp:test:ui": "cd packages/mcp && npm run test:ui",
     "mcp:typecheck": "tsc -p packages/mcp --noEmit"
   },
   "workspaces": [

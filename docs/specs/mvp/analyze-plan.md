@@ -15,8 +15,6 @@ This is the plan for implementing the analyze phase of the [spec for creating th
 Each step should include using test driven development TDD:
 
 - Unit tests for interfaces and implementations
-- Integration tests for plugin functionality
-- End-to-end tests for full analyze workflow
 - Mock implementations for testing isolation
 
 ### Phase 1: Infrastructure Setup
@@ -67,8 +65,8 @@ Each step should include using test driven development TDD:
 
 - [] Create `src/plugins/IPackageManagerPlugin.ts` interface
 - [] Define analyze process steps as plugin methods:
-  - `outdated()` - where user can define the way that you get the json and also how to tranform it into the generic format we have
-  - `analyze()` - this takes in the output of outdated() and then they can define a custom way of analysing them that might include steps like fetching peer deps and things like that specific to their package manager
+  - `outdated()` - where user can define the way that you get the json and also how to transform it into the generic format we have
+  - `analyze()` - this takes in the output of outdated() and then they can define a custom way of analyzing them that might include steps like fetching peer deps and things like that specific to their package manager
 - [] Create `src/services/IPluginRegistry.ts` and implementation for the management of plugins. This can be a singleton and is an internal thing where we register known plugins which exist in the /plugins folder
 - [] Create `src/plugins/IPackageManagerPlugin.test.ts` - test plugin interface contract and method signatures
 - [] Create `src/services/PluginRegistry.test.ts` - test plugin registration, discovery, and retrieval
