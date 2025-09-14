@@ -3,7 +3,7 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/dependency-doctor"
+      "path": "./packages/mcp"
     }
   ],
   "compilerOptions": {

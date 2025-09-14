@@ -1,7 +1,11 @@
-mcp
-xmcp
-sethreidnz
-vitest
-eslint
 cspell
+eslint
+lockfiles
+mcp
+sethreidnz
+timeconsuming
 tsconfig
+underspecified
+vitest
+xmcp
+tsyringe
