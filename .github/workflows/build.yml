@@ -32,7 +32,7 @@ jobs:
           - label: typecheck
             script: typecheck
           - label: test
-            script: test
+            script: test:ci
           - label: spellcheck
             script: spellcheck
 
