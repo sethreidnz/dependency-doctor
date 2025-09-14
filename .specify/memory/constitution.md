@@ -4,7 +4,7 @@
 
 ### Test Driven Development
 
-All features and specs should be developed with test driven development in mind
+All features and specs should be developed with test driven development in mind. This should use vitest and behavior driven development principals.
 
 ## Governance
 

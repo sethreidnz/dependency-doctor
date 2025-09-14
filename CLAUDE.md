@@ -9,7 +9,7 @@ TypeScript npm workspace project for dependency management tooling with MCP (Mod
 - **Package Manager**: npm with workspaces
 - **Type Checking**: TypeScript compiler with workspace-level validation
 - **Linting**: ESLint 9.x with flat configuration (in development)
-- **Testing**: TDD approach with existing test framework
+- **Testing**: TDD approach with Vitest using behavior-driven development principles
 
 ## Project Structure
 ```
@@ -67,7 +67,17 @@ The project follows a base configuration + package override pattern:
 ## Recent Changes
 - Implemented TypeScript configuration system with workspace support
 - Added npm script delegation pattern (root → package-specific commands)
-- Currently implementing ESLint configuration following same patterns
+- Created Dependency Doctor MCP MVP specification and implementation plan
+- Designed MCP server architecture with pluggable package manager support
+- Established data model for dependency analysis and upgrade workflows
+
+## MCP Development Context
+- **MCP Framework**: xmcp (https://xmcp.dev/docs#create-a-new-xmcp-app) for TypeScript MCP servers
+- **MCP Tools**: analyze_dependencies, create_upgrade_groups, execute_upgrade, rollback_upgrade
+- **MCP Resources**: workspace_config, upgrade_documentation, session_state
+- **Package Manager Integration**: npm CLI with programmatic execution and JSON output parsing
+- **Plugin Architecture**: Interface-based system for supporting multiple package managers
+- **Workspace Management**: Configuration persistence, documentation generation, session state tracking
 
 ## ESLint Implementation Details
 - **Format**: Flat configuration (eslint.config.js)

@@ -1,0 +1,435 @@
+{
+  "$schema": "https://spec.modelcontextprotocol.org/schema/mcp-schema.json",
+  "version": "0.1.0",
+  "name": "dependency-doctor-mcp",
+  "description": "MCP server for interactive dependency upgrade workflows",
+  "tools": [
+    {
+      "name": "analyze_dependencies",
+      "description": "Analyze repository dependencies for outdated packages and security vulnerabilities",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "repositoryPath": {
+            "type": "string",
+            "description": "Path to repository root directory"
+          },
+          "packageManager": {
+            "type": "string",
+            "enum": ["npm", "yarn", "pnpm"],
+            "default": "npm",
+            "description": "Package manager to use for analysis"
+          },
+          "includeDevDependencies": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include development dependencies in analysis"
+          },
+          "securityOnly": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only analyze for security vulnerabilities"
+          }
+        },
+        "required": ["repositoryPath"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "totalPackages": {"type": "number"},
+              "outdatedPackages": {"type": "number"},
+              "vulnerablePackages": {"type": "number"},
+              "highSeverityVulnerabilities": {"type": "number"}
+            }
+          },
+          "packages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Package"
+            }
+          },
+          "vulnerabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/VulnerabilityReport"
+            }
+          },
+          "analysisTimestamp": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    {
+      "name": "create_upgrade_groups",
+      "description": "Group related packages for coordinated upgrades",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "packages": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Package names to group"
+          },
+          "strategy": {
+            "type": "string",
+            "enum": ["automatic", "by_ecosystem", "by_type", "manual"],
+            "default": "automatic",
+            "description": "Grouping strategy to use"
+          },
+          "maxGroupSize": {
+            "type": "number",
+            "default": 10,
+            "description": "Maximum packages per group"
+          }
+        },
+        "required": ["packages"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/UpgradeGroup"
+            }
+          },
+          "ungroupedPackages": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    {
+      "name": "execute_upgrade",
+      "description": "Execute upgrade for selected packages or groups with validation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Upgrade session identifier"
+          },
+          "groupIds": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Upgrade group IDs to execute"
+          },
+          "packageNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Individual package names to upgrade"
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": false,
+            "description": "Preview upgrade without making changes"
+          },
+          "runValidation": {
+            "type": "boolean",
+            "default": true,
+            "description": "Run validation commands after upgrade"
+          }
+        },
+        "required": ["sessionId"],
+        "oneOf": [
+          {"required": ["groupIds"]},
+          {"required": ["packageNames"]}
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "session": {
+            "$ref": "#/definitions/UpgradeSession"
+          },
+          "progress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/UpgradeProgress"
+            }
+          },
+          "validationResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ValidationResult"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "rollback_upgrade",
+      "description": "Rollback a failed or problematic upgrade session",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Session ID to rollback"
+          },
+          "validateAfterRollback": {
+            "type": "boolean",
+            "default": true,
+            "description": "Run validation after rollback"
+          }
+        },
+        "required": ["sessionId"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": {"type": "boolean"},
+          "restoredPackages": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "validationResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ValidationResult"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "workspace_config",
+      "description": "Workspace configuration for dependency upgrade preferences",
+      "uri": "file://.dependency-doctor/config.json",
+      "mimeType": "application/json",
+      "schema": {
+        "$ref": "#/definitions/WorkspaceConfiguration"
+      }
+    },
+    {
+      "name": "upgrade_documentation",
+      "description": "Generated documentation and summaries for upgrade sessions",
+      "uri": "file://.dependency-doctor/docs/{sessionId}.md",
+      "mimeType": "text/markdown",
+      "schema": {
+        "type": "string",
+        "description": "Markdown documentation content"
+      }
+    },
+    {
+      "name": "session_state",
+      "description": "Persistent state for upgrade sessions",
+      "uri": "file://.dependency-doctor/sessions/{sessionId}.json",
+      "mimeType": "application/json",
+      "schema": {
+        "$ref": "#/definitions/UpgradeSession"
+      }
+    }
+  ],
+  "definitions": {
+    "Package": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "currentVersion": {"type": "string"},
+        "latestVersion": {"type": "string"},
+        "wantedVersion": {"type": "string"},
+        "type": {
+          "type": "string",
+          "enum": ["dependency", "devDependency", "peerDependency"]
+        },
+        "securityStatus": {
+          "$ref": "#/definitions/SecurityStatus"
+        },
+        "updateType": {
+          "type": "string",
+          "enum": ["major", "minor", "patch", "none"]
+        },
+        "packageManager": {"type": "string"}
+      },
+      "required": ["name", "currentVersion", "latestVersion", "type", "updateType"]
+    },
+    "UpgradeGroup": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "packages": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Package"}
+        },
+        "rationale": {"type": "string"},
+        "estimatedRisk": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "totalPackages": {"type": "number"}
+      },
+      "required": ["id", "name", "packages", "rationale", "estimatedRisk"]
+    },
+    "VulnerabilityReport": {
+      "type": "object",
+      "properties": {
+        "cve": {"type": "string"},
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "moderate", "low"]
+        },
+        "title": {"type": "string"},
+        "description": {"type": "string"},
+        "affectedVersions": {"type": "string"},
+        "patchedVersions": {"type": "string"},
+        "source": {"type": "string"},
+        "publishedDate": {"type": "string", "format": "date-time"},
+        "remediation": {"type": "string"}
+      },
+      "required": ["cve", "severity", "title", "description", "source"]
+    },
+    "UpgradeSession": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["planning", "in_progress", "completed", "failed", "cancelled"]
+        },
+        "startedAt": {"type": "string", "format": "date-time"},
+        "completedAt": {"type": "string", "format": "date-time"},
+        "targetGroups": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/UpgradeGroup"}
+        },
+        "progress": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/UpgradeProgress"}
+        },
+        "decisions": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/UpgradeDecision"}
+        },
+        "rollbackInfo": {"$ref": "#/definitions/RollbackInfo"},
+        "validationResults": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/ValidationResult"}
+        }
+      },
+      "required": ["id", "status", "startedAt", "targetGroups"]
+    },
+    "WorkspaceConfiguration": {
+      "type": "object",
+      "properties": {
+        "validationCommands": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "packageManagerPreferences": {
+          "type": "object",
+          "properties": {
+            "preferredManager": {"type": "string"},
+            "installFlags": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "upgradePreferences": {
+          "type": "object",
+          "properties": {
+            "autoGrouping": {"type": "boolean"},
+            "requireConfirmation": {"type": "boolean"},
+            "maxConcurrentUpgrades": {"type": "number"}
+          }
+        },
+        "securityThreshold": {
+          "type": "string",
+          "enum": ["low", "moderate", "high", "critical"]
+        },
+        "autoGroupingEnabled": {"type": "boolean"},
+        "backupEnabled": {"type": "boolean"},
+        "notificationSettings": {
+          "type": "object",
+          "properties": {
+            "enableNotifications": {"type": "boolean"},
+            "notifyOnVulnerabilities": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "SecurityStatus": {
+      "type": "object",
+      "properties": {
+        "hasVulnerabilities": {"type": "boolean"},
+        "vulnerabilityCount": {"type": "number"},
+        "highestSeverity": {
+          "type": "string",
+          "enum": ["critical", "high", "moderate", "low"]
+        },
+        "reportIds": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "required": ["hasVulnerabilities", "vulnerabilityCount"]
+    },
+    "UpgradeProgress": {
+      "type": "object",
+      "properties": {
+        "step": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed", "failed"]
+        },
+        "timestamp": {"type": "string", "format": "date-time"},
+        "details": {"type": "string"},
+        "errorMessage": {"type": "string"}
+      },
+      "required": ["step", "status", "timestamp"]
+    },
+    "UpgradeDecision": {
+      "type": "object",
+      "properties": {
+        "packageName": {"type": "string"},
+        "action": {
+          "type": "string",
+          "enum": ["upgrade", "skip", "defer"]
+        },
+        "reasoning": {"type": "string"},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "targetVersion": {"type": "string"}
+      },
+      "required": ["packageName", "action", "reasoning", "timestamp"]
+    },
+    "RollbackInfo": {
+      "type": "object",
+      "properties": {
+        "backupPath": {"type": "string"},
+        "originalVersions": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "rollbackCommands": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "createdAt": {"type": "string", "format": "date-time"}
+      },
+      "required": ["backupPath", "originalVersions", "createdAt"]
+    },
+    "ValidationResult": {
+      "type": "object",
+      "properties": {
+        "command": {"type": "string"},
+        "success": {"type": "boolean"},
+        "output": {"type": "string"},
+        "exitCode": {"type": "number"},
+        "duration": {"type": "number"},
+        "timestamp": {"type": "string", "format": "date-time"}
+      },
+      "required": ["command", "success", "output", "exitCode", "timestamp"]
+    }
+  }
+}
