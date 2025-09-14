@@ -1,27 +1,27 @@
 # Analyze plan
 
-This is the plan for implementing the analyse phase
+This is the plan for implementing the analyze phase
 
 ## High-level plan
 
 1. Add dependency injection and logging in the same way this project does with pino and tsyringe: /Users/seth/dev/microsoft/ev2-bicep/packages/cli/src/index.ts
-1. Implement ./packages/mcp/src/services/fileSystem/IFileSystem.ts in same folder differnet file
+1. Implement ./packages/mcp/src/services/fileSystem/IFileSystem.ts in same folder different file
 1. Define a similar interface `IChildProcess` for abstracting the use of child_process and doing execution with streaming etc
 1. Create the generic interface to represent PackageInformation in ./packages/mcp/src/models/PackageInformation.ts
 1. Create the generic interface to represent output format for the `analyzed.json` in ./packages/mcp/src/models/AnalyzedDependencies.ts that will need to include things like the grouping and other stuff from the spec
 1. Define the clear steps that are involved in the analyze process from the spec so we can define integration points for the plugin system
-1. Define the plugin system that will allow users to implement the required steps for each langauge and package manager
-1. Create a file ./packages/mcp/src/plugins/npm.ts where we implement the npm one using the `IFileSystem` and `IChildProcess` and also defin the DTO for the raw outputs of the outdated and audit responses so we can put them in the raw.json file
-1. Create a IDependencyService with `analyse` method that does the analysis and returns
+1. Define the plugin system that will allow users to implement the required steps for each language and package manager
+1. Create a file ./packages/mcp/src/plugins/npm.ts where we implement the npm one using the `IFileSystem` and `IChildProcess` and also define the DTO for the raw outputs of the outdated and audit responses so we can put them in the raw.json file
+1. Create a IDependencyService with `analyze` method that does the analysis and returns
 1. Create the template for the status.md
-1. Create the template for the analyse session notes
+1. Create the template for the analyze session notes
 1. Create an mcp resource for the array of package.json file paths for the current directory
 1. Create an mcp resource for the dependency doctor settings file
 1. Create an mcp resource for the status.md file
 1. Create an mcp resource for the raw npm output json
-1. Create an mcp resource for the anaysed dependency json
+1. Create an mcp resource for the abased dependency json
 1. Create an mcp resource for the current session notes
-1. Create mcp tool for `analyse` => does the whole analyse flow, updating hte templates and what not and updates the resources and such
+1. Create mcp tool for `analyze` => does the whole analyze flow, updating hte templates and what not and updates the resources and such
 1. Create prompt for going through the process
 
 ## Step-by-step plan

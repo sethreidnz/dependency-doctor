@@ -68,7 +68,7 @@ The process to update packages can be split into two main phases which I think w
 #### 1. Analyze
 
 1. Create the `/session-notes/{date}-analyze.md` based on the template [analyze.md](../../../templates/session-notes/analyze.md)
-1. Get dependency status - Run `npm outdated`, `npm audit` and outputs it into `raw.json` like `{ oudated: {}, audit: {} }`
+1. Get dependency status - Run `npm outdated`, `npm audit` and outputs it into `raw.json` like `{ outdated: {}, audit: {} }`
 1. Upgrade classification - Inject the raw dependency data and carry out classification steps and outputs it into `analyzed.json` in a domain specific format for use in next steps
    - Group packages by peer-dependencies, common dependencies, groups defined in config.yml
    - Major vs minor updates

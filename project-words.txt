@@ -8,3 +8,4 @@ tsconfig
 underspecified
 vitest
 xmcp
+tsyringe
