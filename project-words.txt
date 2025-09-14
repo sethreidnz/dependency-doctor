@@ -3,6 +3,7 @@ eslint
 lockfiles
 mcp
 sethreidnz
+timeconsuming
 tsconfig
 underspecified
 vitest
