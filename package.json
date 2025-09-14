@@ -10,20 +10,22 @@
   "scripts": {
     "build": "npm run mcp:build",
     "dev": "npm run mcp:dev",
-    "start": "npm run mcp:start",
     "lint": "npm run mcp:lint",
+    "spellcheck": "cspell .",
+    "start": "npm run mcp:start",
     "test": "npm run mcp:test",
-    "test:ui": "npm run mcp:test:ui",
     "test:coverage": "npm run mcp:test:coverage",
+    "test:ui": "npm run mcp:test:ui",
+    "typecheck": "npm run mcp:typecheck",
+    "validate": "run-p lint typecheck test spellcheck",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
+    "mcp:lint": "eslint packages/dependency-doctor --config packages/dependency-doctor/eslint.config.js --cache --cache-location .eslintcache",
     "mcp:start": "npm run -w @dependency-doctor/mcp start",
     "mcp:test": "vitest run --config packages/dependency-doctor/vitest.config.ts",
-    "mcp:test:ui": "vitest --ui --config packages/dependency-doctor/vitest.config.ts",
     "mcp:test:coverage": "vitest run --coverage --config packages/dependency-doctor/vitest.config.ts",
-    "mcp:lint": "eslint packages/dependency-doctor --config packages/dependency-doctor/eslint.config.js --cache --cache-location .eslintcache",
-    "mcp:typecheck": "tsc -p packages/dependency-doctor --noEmit",
-    "typecheck": "npm run mcp:typecheck"
+    "mcp:test:ui": "vitest --ui --config packages/dependency-doctor/vitest.config.ts",
+    "mcp:typecheck": "tsc -p packages/dependency-doctor --noEmit"
   },
   "workspaces": [
     "packages/dependency-doctor"
@@ -46,7 +48,9 @@
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "@vitest/ui": "^3.2.4",
+    "cspell": "^9.2.1",
     "eslint": "^9.35.0",
+    "npm-run-all": "^4.1.5",
     "vitest": "^3.2.4"
   }
 }

@@ -65,9 +65,25 @@ To run tests for the workspace:
 npm run test
 ```
 
+#### Spellcheck
+
+To run spellchecking across all documentation and code comments:
+
+```bash
+npm run spellcheck
+```
+
+#### Validate all checks
+
+To run all validation checks (lint, typecheck, test, spellcheck) in parallel before pushing:
+
+```bash
+npm run validate
+```
+
 #### Build
 
-To build the `@dependency-doctoer/mcp` package:
+To build the `@dependency-doctor/mcp` package:
 
 ```bash
 npm run build

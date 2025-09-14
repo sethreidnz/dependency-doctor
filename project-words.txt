@@ -1,0 +1,7 @@
+mcp
+xmcp
+sethreidnz
+vitest
+eslint
+cspell
+tsconfig
