@@ -21,10 +21,12 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Download MCP package artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dependency-doctor-mcp-main-${{ github.event.workflow_run.head_sha }}
-          path: ./package
+        run: |
+          gh run download ${{ github.event.workflow_run.id }} \
+            --name dependency-doctor-mcp-main-${{ github.event.workflow_run.head_sha }} \
+            --dir ./package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # TODO: Enable publishing when ready
       # - name: Publish to npm
