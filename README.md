@@ -75,7 +75,7 @@ npm run spellcheck
 
 #### Validate all checks
 
-To run all validation checks (lint, typecheck, test, spellcheck) in parallel before pushing:
+To run all validation checks (lint, typecheck, test, spellcheck, build) in parallel before pushing:
 
 ```bash
 npm run validate
