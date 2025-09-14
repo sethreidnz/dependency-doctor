@@ -17,7 +17,7 @@
     "test:ci": "npm run mcp:test:ci",
     "test:ui": "npm run mcp:test:ui",
     "typecheck": "npm run mcp:typecheck",
-    "validate": "run-p lint typecheck test:ci spellcheck",
+    "validate": "run-p lint typecheck test:ci spellcheck build",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
     "mcp:lint": "eslint packages/dependency-doctor --config packages/dependency-doctor/eslint.config.js --cache --cache-location .eslintcache",

@@ -60,8 +60,6 @@ Runs tests with coverage reporting.
 npm run test:coverage
 ```
 
-**What it does:** Runs `npm run mcp:test:coverage` which executes Vitest with coverage reporting enabled.
-
 ### `npm run test:ui`
 
 Runs tests with the Vitest UI for interactive test running.
@@ -80,11 +78,13 @@ npm run typecheck
 
 ### `npm run validate`
 
-Runs all validation checks in parallel which is useful for final validation before pushing.
+**🎯 Meta-script:** Runs all validation checks in parallel before pushing.
 
 ```bash
 npm run validate
 ```
+
+**What it does:** Executes `run-p lint typecheck test:ci spellcheck build` to run all quality assurance and build checks simultaneously. This mirrors the same validation that runs in the GitHub Actions CI pipeline.
 
 ## Package-Specific Scripts (mcp:\*)
 

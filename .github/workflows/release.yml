@@ -1,0 +1,41 @@
+name: release
+
+on:
+  workflow_run:
+    workflows: ["build"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.15.0"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download MCP package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dependency-doctor-mcp-main-${{ github.event.workflow_run.head_sha }}
+          path: ./package
+
+      - name: Publish to npm
+        run: |
+          cd package
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Upload published package
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-doctor-mcp-published-${{ github.event.workflow_run.head_sha }}
+          path: package/
+          retention-days: 90
