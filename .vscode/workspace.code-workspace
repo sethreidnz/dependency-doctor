@@ -1,12 +1,12 @@
 {
   "folders": [
     {
-      "name": "@asi/workspace",
+      "name": "@dependency-doctor/workspace",
       "path": "."
     },
     {
-      "name": "@dependency-doctore/mcp",
-      "path": "./packages/dependency-doctor"
+      "name": "@dependency-doctor/mcp",
+      "path": "./packages/mcp"
     }
   ],
   "settings": {

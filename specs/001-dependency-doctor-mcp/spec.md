@@ -16,7 +16,7 @@ This MCP tool should focus on the high-level steps that are require to carry out
 
 The basic features would be:
 
-- Analyse - As a user I want to be able to to a high-level analysis of my repository and it's dependencies for a given package manager. I want this to produce artifacts in the repository that give an up to date and organised view of the dependency updates required in the repository.
+- Analyze - As a user I want to be able to to a high-level analysis of my repository and it's dependencies for a given package manager. I want this to produce artifacts in the repository that give an up to date and organized view of the dependency updates required in the repository.
 - As a user I want to be able to interactively upgrade a particular library in an automated fashion to make upgrading as easy and safe as possible with as minimal user input as possible"
 
 ## Execution Flow (main)
