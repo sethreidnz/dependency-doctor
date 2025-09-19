@@ -2,6 +2,7 @@ cspell
 eslint
 lockfiles
 mcp
+promisified
 sethreidnz
 timeconsuming
 tsconfig

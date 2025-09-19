@@ -20,7 +20,7 @@
     "validate": "run-p lint typecheck test:ci spellcheck build",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
-    "mcp:lint": "eslint packages/mcp --config packages/mcp/eslint.config.js --cache --cache-location .eslintcache",
+    "mcp:lint": "eslint packages/mcp/src packages/mcp/*.ts --config packages/mcp/eslint.config.js --cache --cache-location .eslintcache",
     "mcp:start": "npm run -w @dependency-doctor/mcp start",
     "mcp:test": "cd packages/mcp && npm test",
     "mcp:test:ci": "cd packages/mcp && npm run test -- --run --coverage",
