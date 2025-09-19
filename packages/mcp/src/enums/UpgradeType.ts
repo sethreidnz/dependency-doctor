@@ -1,3 +1,6 @@
+/**
+ * The type of upgrade needed for a dependency
+ */
 export enum UpgradeType {
   Major = "major",
   Minor = "minor",

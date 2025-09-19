@@ -3,17 +3,18 @@
  */
 export const InjectionTokens = {
   // Core services
-  Logger: Symbol.for('Logger'),
-  
+  Logger: Symbol.for("Logger"),
+
   // Infrastructure services
-  FileSystem: Symbol.for('FileSystem'),
-  
+  FileSystem: Symbol.for("FileSystem"),
+
   // Business services
-  DependencyService: Symbol.for('DependencyService'),
-  PluginRegistry: Symbol.for('PluginRegistry'),
-  
+  DependencyService: Symbol.for("DependencyService"),
+  PluginRegistry: Symbol.for("PluginRegistry"),
+
   // Package manager plugins
-  NpmPlugin: Symbol.for('NpmPlugin'),
+  NpmPlugin: Symbol.for("NpmPlugin"),
 } as const;
 
-export type InjectionToken = typeof InjectionTokens[keyof typeof InjectionTokens];
+export type InjectionToken =
+  (typeof InjectionTokens)[keyof typeof InjectionTokens];

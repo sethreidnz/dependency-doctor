@@ -10,3 +10,4 @@ underspecified
 vitest
 xmcp
 tsyringe
+cves

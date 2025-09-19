@@ -39,62 +39,56 @@ Each step should include using test driven development TDD:
 - [x] Register implementations in ServiceContainer
 - [x] No tests needed for these ones
 
-### Phase 2: Data Models and Architecture
+### Phase 2: Data Models 🚧 IN PROGRESS
 
-**Step 3: Define data models**
+**Step 3: Define core data models**
 
 - [x] Create `src/models/AppError.ts` - custom error class with `fromError()` and `fromUnknown()` methods
 - [x] Create `src/models/AppError.test.ts` - comprehensive tests using whole-object assertion pattern
-- [x] Create `src/models/PackageInformation.ts` - generic package info interface (already exists)
-- [ ] Create `src/models/AnalyzedDependencies.ts` - analyzed output format
-- [ ] Create `src/plugins/npm/OutdatedJson.ts` `src/plugins/npm/AuditJson.ts` - raw npm command outputs from the --json commands and then a combined model of that with `{ outdated: OutdatedJson; audit: AuditJson; }`
-- [ ] Include dependency grouping, classification, difficulty assessment
-- [ ] Create `src/models/AnalyzedDependencies.test.ts` - test analysis result structure and grouping logic
+- [x] Create `src/enums/VulnerabilitySeverity.ts` - generic vulnerability severity levels
+- [x] Create `src/enums/PackageManager.ts` - supported package managers (npm for now)
+- [x] Create `src/models/DependencyInfo.ts` - core package info interface with security data
+- [x] Create `src/models/DependencyCollection.ts` - collection of DependencyInfo items
+- [x] Create `src/plugins/npm/OutdatedJson.ts` - npm outdated --json output types
+- [x] Create `src/plugins/npm/AuditJson.ts` - npm audit --json output types  
+- [x] Create `src/plugins/npm/NpmRawData.ts` - combined npm data model
+- [ ] Create tests for DependencyInfo and DependencyCollection models
 
-**Step 4: Define analyze process integration points**
+**Data Model Structure:**
+- `DependencyInfo`: Core interface with name, versions, upgradeType, and SecurityInfo
+- `SecurityInfo`: Contains vulnerability data with severity, count, and details
+- `VulnerabilityInfo`: Individual vulnerability with severity, title, url, id
+- `DependencyCollection`: Array of DependencyInfo with metadata and PackageManager enum
+- `PackageManager`: Enum with Npm (extensible for future package managers)
 
-- [] Map out the clear steps involved in the analyze process from the spec:
-  - Session notes creation
-  - Raw data collection (npm outdated, npm audit)
-  - Dependency classification and grouping
-  - Status document generation
-  - Template updates
-- [] Define integration points for the plugin system
-- [] Create `src/analyze/AnalyzeProcess.test.ts` - test the analyze workflow integration points and step sequencing
+### Phase 3: Analysis and Plugin System
 
-**Step 5: Design plugin system architecture**
+**Step 4: Design plugin system architecture**
 
-- [] Create `src/plugins/IPackageManagerPlugin.ts` interface
-- [] Define analyze process steps as plugin methods:
-  - `outdated()` - where user can define the way that you get the json and also how to transform it into the generic format we have
-  - `analyze()` - this takes in the output of outdated() and then they can define a custom way of analyzing them that might include steps like fetching peer deps and things like that specific to their package manager
-- [] Create `src/services/IPluginRegistry.ts` and implementation for the management of plugins. This can be a singleton and is an internal thing where we register known plugins which exist in the /plugins folder
-- [] Create `src/plugins/IPackageManagerPlugin.test.ts` - test plugin interface contract and method signatures
-- [] Create `src/services/PluginRegistry.test.ts` - test plugin registration, discovery, and retrieval
+- [ ] Create `src/plugins/IPackageManagerPlugin.ts` interface
+- [ ] Define plugin contract with methods:
+  - `collectRawData()` - fetch npm outdated and audit JSON
+  - `transformToGeneric()` - convert raw npm data to DependencyInfo[]
+- [ ] Create `src/services/IPluginRegistry.ts` and implementation for plugin management
+- [ ] Create `src/plugins/IPackageManagerPlugin.test.ts` - test plugin interface contract
 
-### Phase 3: NPM Implementation
+**Step 5: Implement npm plugin**
 
-**Step 6: Implement npm plugin**
+- [ ] Create `src/plugins/npm/NpmPlugin.ts` implementing IPackageManagerPlugin
+- [ ] Implement npm command execution using `execa`
+- [ ] Implement transformation from npm JSON to DependencyInfo[]
+- [ ] Map npm vulnerability data to generic SecurityInfo structure
+- [ ] Create `src/plugins/npm/NpmPlugin.test.ts` - unit tests with mocked command execution
 
-- [] Create `src/plugins/npm.ts` implementing IPackageManagerPlugin (following high-level plan path)
-- [] Define DTOs within the file for raw outputs:
-  - NpmOutdatedJson for `npm outdated --json` response
-  - NpmAuditJson for `npm audit --json` response
-- [] Implement npm command execution using `IFileSystem` and `IChildProcess`
-- [] Implement dependency classification logic
-- [] Create `src/plugins/npm.test.ts` - unit tests for npm plugin with mocked command execution
-- [] Create `src/plugins/npm.integration.test.ts` - integration tests with real npm commands (CI-safe)
+**Step 6: Create dependency service**
 
-**Step 7: Create dependency service**
-
-- [] Create `src/services/IDependencyService.ts` interface
-- [] Create `src/services/DependencyService.ts` implementation
-- [] Implement `analyze()` method that:
+- [ ] Create `src/services/IDependencyService.ts` interface
+- [ ] Create `src/services/DependencyService.ts` implementation
+- [ ] Implement `collect()` method that:
   - Uses plugin to collect raw data
-  - Uses plugin to classify dependencies
-  - Manages workspace file creation/updates
-  - Returns analysis results
-- [] Create `src/services/DependencyService.test.ts` - unit tests with mocked plugins and file operations
+  - Uses plugin to transform to generic format
+  - Returns DependencyCollection
+- [ ] Create `src/services/DependencyService.test.ts` - unit tests with mocked plugins
 
 ### Phase 4: Templates and Resources
 
