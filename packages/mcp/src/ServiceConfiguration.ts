@@ -3,9 +3,7 @@ import { container } from 'tsyringe';
 import pino from 'pino';
 import { InjectionTokens } from './enums/InjectionTokens.js';
 import { FileSystem } from './services/fileSystem/FileSystem.js';
-import { ChildProcess } from './services/childProcess/ChildProcess.js';
 import type { IFileSystem } from './services/fileSystem/IFileSystem.js';
-import type { IChildProcess } from './services/childProcess/IChildProcess.js';
 
 /**
  * Service configuration and dependency injection setup
@@ -40,7 +38,6 @@ export class ServiceConfiguration {
 
     // Register infrastructure services
     container.register<IFileSystem>(InjectionTokens.FileSystem, FileSystem);
-    container.register<IChildProcess>(InjectionTokens.ChildProcess, ChildProcess);
 
     this._isConfigured = true;
   }

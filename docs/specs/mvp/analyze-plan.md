@@ -33,8 +33,9 @@ Each step should include using test driven development TDD:
 
 - [x] Create `src/services/fileSystem/IFileSystem.ts` interface
 - [x] Create `src/services/fileSystem/FileSystem.ts` implementation
-- [x] Create `src/services/childProcess/IChildProcess.ts` interface
-- [x] Create `src/services/childProcess/ChildProcess.ts` implementation
+- [x] ~~Create `src/services/childProcess/IChildProcess.ts` interface~~ (Replaced with execa)
+- [x] ~~Create `src/services/childProcess/ChildProcess.ts` implementation~~ (Replaced with execa)
+- [x] Add `execa` dependency for shell command execution with better DX
 - [x] Register implementations in ServiceContainer
 - [x] No tests needed for these ones
 
@@ -42,13 +43,13 @@ Each step should include using test driven development TDD:
 
 **Step 3: Define data models**
 
-- [] Create `src/models/PackageInformation.ts` - [] generic package info interface
-- [] Create `src/models/AnalyzedDependencies.ts` - [] analyzed output format
-- [] Create `src/plugins/npm/OutdatedJson.ts` `src/plugins/npm/AuditJson.ts` - [] raw npm command outputs from the --json commands and then a combined model of that with `{ outdated: OutdatedJson; audit: AuditJson; }`
-- [] Include dependency grouping, classification, difficulty assessment
-- [] Create `src/models/PackageInformation.test.ts` - test data model validation and serialization
-- [] Create `src/models/AnalyzedDependencies.test.ts` - test analysis result structure and grouping logic
-- [] Create `src/plugins/npm/OutdatedJson.test.ts` and `src/plugins/npm/AuditJson.test.ts` - test JSON parsing and data transformation
+- [x] Create `src/models/AppError.ts` - custom error class with `fromError()` and `fromUnknown()` methods
+- [x] Create `src/models/AppError.test.ts` - comprehensive tests using whole-object assertion pattern
+- [x] Create `src/models/PackageInformation.ts` - generic package info interface (already exists)
+- [ ] Create `src/models/AnalyzedDependencies.ts` - analyzed output format
+- [ ] Create `src/plugins/npm/OutdatedJson.ts` `src/plugins/npm/AuditJson.ts` - raw npm command outputs from the --json commands and then a combined model of that with `{ outdated: OutdatedJson; audit: AuditJson; }`
+- [ ] Include dependency grouping, classification, difficulty assessment
+- [ ] Create `src/models/AnalyzedDependencies.test.ts` - test analysis result structure and grouping logic
 
 **Step 4: Define analyze process integration points**
 
@@ -139,20 +140,33 @@ Each step should include using test driven development TDD:
 ### Phase 1: Infrastructure Setup ✅ COMPLETED
 
 **Step 1: Set up dependency injection infrastructure**
+
 - ✅ Added tsyringe, pino, reflect-metadata dependencies to package.json
-- ✅ Created ServiceConfiguration.ts with DI container setup and pino logger configuration  
+- ✅ Created ServiceConfiguration.ts with DI container setup and pino logger configuration
 - ✅ Created InjectionTokens.ts enum for type-safe dependency injection tokens
 - ✅ Set up reflect-metadata import in ServiceConfiguration.ts
 - ✅ Skipped individual test files for tokens and service config as agreed
 
 **Step 2: Create abstraction interfaces**
+
 - ✅ Created IFileSystem.ts interface for file operations (already existed)
 - ✅ Created FileSystem.ts implementation using Node.js fs promises with @injectable decorator
-- ✅ Created IChildProcess.ts interface extending Node.js ExecOptions for type safety
-- ✅ Created ChildProcess.ts simplified implementation using promisified exec
-- ✅ Registered all implementations in ServiceConfiguration DI container
-- ✅ Created basic tests for ChildProcess class with vitest setup
+- ✅ ~~Created IChildProcess.ts interface extending Node.js ExecOptions for type safety~~ (Replaced with execa)
+- ✅ ~~Created ChildProcess.ts simplified implementation using promisified exec~~ (Replaced with execa)
+- ✅ Added `execa` package for better shell command execution DX
+- ✅ Removed custom ChildProcess implementation and all related files and DI registrations
+- ✅ Registered remaining implementations in ServiceConfiguration DI container
+- ✅ ~~Created basic tests for ChildProcess class with vitest setup~~ (Removed with ChildProcess)
 - ✅ Set up test infrastructure with setupTests.ts and vitest configuration
 - ✅ Fixed root-level test script to work conveniently from workspace root
 
-**Infrastructure Status**: All Phase 1 tasks complete. Build ✅, Tests ✅ (6/6 passing), TypeScript ✅
+**Infrastructure Status**: All Phase 1 tasks complete. Build ✅, Tests ✅ (8/8 passing), TypeScript ✅
+
+### Phase 2: Data Models and Architecture 🚧 IN PROGRESS
+
+**Step 3: Define data models**
+
+- ✅ Created AppError.ts custom error class with `fromError()` and `fromUnknown()` static methods
+- ✅ Created AppError.test.ts with comprehensive test coverage using whole-object assertion pattern
+- ✅ Updated ChildProcess usage to use new AppError class before removal
+- ✅ PackageInformation.ts already exists with UpgradeType enum integration

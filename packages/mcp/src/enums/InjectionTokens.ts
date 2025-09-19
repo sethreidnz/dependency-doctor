@@ -7,7 +7,6 @@ export const InjectionTokens = {
   
   // Infrastructure services
   FileSystem: Symbol.for('FileSystem'),
-  ChildProcess: Symbol.for('ChildProcess'),
   
   // Business services
   DependencyService: Symbol.for('DependencyService'),
