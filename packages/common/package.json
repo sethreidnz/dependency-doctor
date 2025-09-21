@@ -17,16 +17,5 @@
   "devDependencies": {
     "typescript": "^5.0.0",
     "vitest": "^2.0.0"
-  },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
   }
 }

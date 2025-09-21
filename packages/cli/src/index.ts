@@ -1,10 +1,8 @@
-#!/usr/bin/env node
-
 import { Command } from "commander";
 import fs from "fs/promises";
 import path from "path";
-import { PackageManager } from "@dependency-doctor/common/enums/PackageManager.js";
-import { ProjectConfigurationJson } from "@dependency-doctor/common/models/ProjectConfiguration.js";
+import { PackageManager } from "@dependency-doctor/common/enums/PackageManager";
+import { ProjectConfigurationJson } from "@dependency-doctor/common/models/ProjectConfiguration";
 import packageJson from "../package.json";
 
 const program = new Command();

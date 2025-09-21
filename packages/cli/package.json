@@ -8,9 +8,7 @@
   },
   "scripts": {
     "build": "vite build && chmod +x dist/index.js",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui"
+    "test": "vitest"
   },
   "dependencies": {
     "commander": "^14.0.1"

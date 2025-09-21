@@ -14,8 +14,6 @@ export const metadata: ToolMetadata = {
 };
 
 // Tool implementation
-export default function getDependencyInfo({
-  name,
-}: InferSchema<typeof schema>) {
+export default function getDependencyInfo({}: InferSchema<typeof schema>) {
   throw new Error("Not implemented yet");
 }

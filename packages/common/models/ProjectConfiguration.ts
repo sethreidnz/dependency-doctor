@@ -1,4 +1,4 @@
-import { PackageManager } from "../enums/PackageManager.js";
+import { PackageManager } from "../enums/PackageManager";
 
 /**
  * Configuration for a specific package manager

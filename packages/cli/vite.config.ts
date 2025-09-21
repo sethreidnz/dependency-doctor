@@ -7,7 +7,7 @@ export default defineConfig({
       formats: ["es"],
       fileName: "index",
     },
-    outDir: "packages/cli/dist",
+    outDir: "dist",
     rollupOptions: {
       external: [
         "commander",
