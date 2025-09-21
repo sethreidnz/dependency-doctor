@@ -1,0 +1,29 @@
+{
+  "name": "@dependency-doctor/cli",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Command-line interface for Dependency Doctor",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "vite build && chmod +x dist/index.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "commander": "^14.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "main": "./dist/index.js",
+  "bin": {
+    "dependency-doctor": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ]
+}

@@ -7,7 +7,9 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "build": "xmcp build",
+    "build": "npm run build:mcp && npm run build:cli",
+    "build:mcp": "xmcp build",
+    "build:cli": "tsc",
     "dev": "xmcp dev",
     "start": "node dist/stdio.js",
     "test": "vitest",
@@ -19,19 +21,20 @@
     "execa": "^9.6.0",
     "pino": "^9.5.0",
     "reflect-metadata": "^0.2.2",
+    "tsx": "^4.20.5",
     "tsyringe": "^4.8.0",
     "xmcp": "^0.2.1",
     "zod": "3.24.4"
   },
   "devDependencies": {
-    "swc-loader": "^0.2.6",
-    "tsx": "^4.20.5"
+    "esbuild": "^0.25.9",
+    "swc-loader": "^0.2.6"
   },
   "main": "./dist/stdio.js",
   "files": [
     "dist"
   ],
   "bin": {
-    "dependency-doctor": "./src/cli.ts"
+    "dependency-doctor": "./dist/cli.js"
   }
 }

@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
 import pino from "pino";
-import { InjectionTokens } from "./enums/InjectionTokens.js";
-import { FileSystem } from "./repository/fileSystem/FileSystem.js";
-import type { IFileSystem } from "./repository/fileSystem/IFileSystem.js";
+import { InjectionTokens } from "@dependency-doctor/common/enums/InjectionTokens.js";
+import { FileSystem } from "@dependency-doctor/common/repository/fileSystem/FileSystem.js";
+import type { IFileSystem } from "@dependency-doctor/common/repository/fileSystem/IFileSystem.js";
 
 /**
  * Service configuration and dependency injection setup

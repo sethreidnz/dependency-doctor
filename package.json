@@ -8,16 +8,22 @@
   "description": "Workspace for the Dependency Doctor project",
   "homepage": "https://github.com/sethreidnz/dependency-doctor#readme",
   "scripts": {
-    "build": "npm run mcp:build",
+    "build": "npm run common:build && npm run mcp:build && npm run cli:build",
     "dev": "npm run mcp:dev",
-    "lint": "npm run mcp:lint",
+    "lint": "npm run common:lint && npm run mcp:lint && npm run cli:lint",
     "spellcheck": "cspell .",
     "start": "npm run mcp:start",
-    "test": "npm run mcp:test",
-    "test:ci": "npm run mcp:test:ci",
-    "test:ui": "npm run mcp:test:ui",
-    "typecheck": "npm run mcp:typecheck",
+    "test": "npm run common:test && npm run mcp:test && npm run cli:test",
+    "test:ci": "npm run common:test:ci && npm run mcp:test:ci && npm run cli:test:ci",
+    "test:ui": "npm run common:test:ui && npm run mcp:test:ui && npm run cli:test:ui",
+    "typecheck": "npm run common:typecheck && npm run mcp:typecheck && npm run cli:typecheck",
     "validate": "run-p lint typecheck test:ci spellcheck build",
+    "common:build": "npm run -w @dependency-doctor/common build",
+    "common:lint": "eslint packages/common/**/*.ts --config packages/common/eslint.config.js --cache --cache-location .eslintcache",
+    "common:test": "cd packages/common && npm test",
+    "common:test:ci": "cd packages/common && npm run test -- --run --coverage",
+    "common:test:ui": "cd packages/common && npm run test:ui",
+    "common:typecheck": "tsc -p packages/common --noEmit",
     "mcp:build": "npm run -w @dependency-doctor/mcp build",
     "mcp:dev": "npm run -w @dependency-doctor/mcp dev",
     "mcp:lint": "eslint packages/mcp/src packages/mcp/*.ts --config packages/mcp/eslint.config.js --cache --cache-location .eslintcache",
@@ -25,10 +31,18 @@
     "mcp:test": "cd packages/mcp && npm test",
     "mcp:test:ci": "cd packages/mcp && npm run test -- --run --coverage",
     "mcp:test:ui": "cd packages/mcp && npm run test:ui",
-    "mcp:typecheck": "tsc -p packages/mcp --noEmit"
+    "mcp:typecheck": "tsc -p packages/mcp --noEmit",
+    "cli:build": "npm run -w @dependency-doctor/cli build",
+    "cli:lint": "eslint packages/cli/src --config packages/cli/eslint.config.js --cache --cache-location .eslintcache",
+    "cli:test": "cd packages/cli && npm test",
+    "cli:test:ci": "cd packages/cli && npm run test -- --run --coverage",
+    "cli:test:ui": "cd packages/cli && npm run test:ui",
+    "cli:typecheck": "tsc -p packages/cli --noEmit"
   },
   "workspaces": [
-    "packages/mcp"
+    "packages/mcp",
+    "packages/common",
+    "packages/cli"
   ],
   "repository": {
     "type": "git",
@@ -52,6 +66,7 @@
     "cspell": "^9.2.1",
     "eslint": "^9.35.0",
     "npm-run-all": "^4.1.5",
+    "vite": "^5.4.20",
     "vitest": "^3.2.4"
   }
 }
