@@ -1,9 +1,18 @@
-import { PackageManager } from "../enums/PackageManager";
+import { PackageManager } from "../enums/PackageManager.js";
 
-export type ProjectConfiguration = {
-  packageManagers: Array<PackageConfiguration>;
-};
+/**
+ * Configuration for a specific package manager
+ */
+export interface PackageConfigurationJson {
+  /** Whether this package manager is enabled for analysis */
+  enabled: boolean;
+}
 
-export type PackageConfiguration = {
-  packageManager: PackageManager;
-};
+/**
+ * Project-wide configuration for Dependency Doctor
+ * Contains top-level settings and package manager specific configurations
+ */
+export interface ProjectConfigurationJson {
+  version: string;
+  [PackageManager.Npm]: PackageConfigurationJson;
+}

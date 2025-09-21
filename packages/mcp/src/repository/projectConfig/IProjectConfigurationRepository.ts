@@ -1,5 +1,5 @@
-import { ProjectConfiguration } from "../../models/ProjectConfiguration";
+import { ProjectConfigurationJson } from "../../models/ProjectConfiguration";
 
 export interface IProjectConfigRepository {
-  get config(): ProjectConfiguration;
+  get config(): ProjectConfigurationJson;
 }

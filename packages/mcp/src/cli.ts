@@ -1,23 +1,76 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
-import { Command } from 'commander';
-import { initProject } from './commands/init.js';
+import { Command } from "commander";
+import fs from "fs/promises";
+import path from "path";
+import { PackageManager } from "./enums/PackageManager.js";
+import { ProjectConfigurationJson } from "./models/ProjectConfiguration.js";
+import packageJson from "../package.json";
 
 const program = new Command();
 
 program
-  .name('dependency-doctor')
-  .description('Dependency Doctor - Interactive dependency upgrade workflows')
-  .version('0.1.0');
+  .name("dependency-doctor")
+  .description("Dependency Doctor - Interactive dependency upgrade workflows")
+  .version(packageJson.version);
 
 program
-  .command('init')
-  .description('Initialize Dependency Doctor in the current project')
+  .command("init")
+  .description("Initialize Dependency Doctor in the current project")
   .action(async () => {
     try {
-      await initProject();
+      const cwd = process.cwd();
+      const dependencyDoctorDir = path.join(cwd, ".dependency-doctor");
+      const settingsFile = path.join(dependencyDoctorDir, "settings.json");
+
+      console.log("🔧 Initializing Dependency Doctor...");
+
+      // Check if already initialized
+      try {
+        await fs.access(settingsFile);
+        console.log(
+          "⚠️  Dependency Doctor is already initialized in this project"
+        );
+        console.log(`Settings file exists: ${settingsFile}`);
+        return;
+      } catch {
+        // File doesn't exist, continue with initialization
+      }
+
+      // Create directory structure
+      await fs.mkdir(dependencyDoctorDir, { recursive: true });
+
+      // Create npm subdirectory for future output files
+      const npmDir = path.join(dependencyDoctorDir, "npm");
+      await fs.mkdir(npmDir, { recursive: true });
+
+      // Create default project configuration
+      const defaultSettings: ProjectConfigurationJson = {
+        version: packageJson.version,
+        [PackageManager.Npm]: {
+          enabled: true,
+        },
+      };
+
+      // Write settings file
+      await fs.writeFile(
+        settingsFile,
+        JSON.stringify(defaultSettings, null, 2)
+      );
+
+      console.log("✅ Dependency Doctor initialized successfully!");
+      console.log("");
+      console.log("📁 Created:");
+      console.log(`   ${path.relative(cwd, dependencyDoctorDir)}/`);
+      console.log(`   ${path.relative(cwd, settingsFile)}`);
+      console.log(`   ${path.relative(cwd, npmDir)}/`);
+      console.log("");
+      console.log("🚀 Next steps:");
+      console.log(
+        "   Use Dependency Doctor MCP tools to analyze your dependencies"
+      );
     } catch (error) {
-      console.error('Failed to initialize project:', error);
+      console.error("Failed to initialize project:", error);
       process.exit(1);
     }
   });
