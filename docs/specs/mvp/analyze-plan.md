@@ -50,117 +50,76 @@ Each step should include using test driven development TDD:
 - [x] Create `src/models/DependencyInfo.ts` - core package info interface with security data
 - [x] Create `src/models/DependencyCollection.ts` - collection of DependencyInfo items
 - [x] Create `src/plugins/npm/OutdatedJson.ts` - npm outdated --json output types
-- [x] Create `src/plugins/npm/AuditJson.ts` - npm audit --json output types  
+- [x] Create `src/plugins/npm/AuditJson.ts` - npm audit --json output types
 - [x] Create `src/plugins/npm/NpmRawData.ts` - combined npm data model
 - [ ] Create tests for DependencyInfo and DependencyCollection models
 
 **Data Model Structure:**
+
 - `DependencyInfo`: Core interface with name, versions, upgradeType, and SecurityInfo
 - `SecurityInfo`: Contains vulnerability data with severity, count, and details
 - `VulnerabilityInfo`: Individual vulnerability with severity, title, url, id
 - `DependencyCollection`: Array of DependencyInfo with metadata and PackageManager enum
 - `PackageManager`: Enum with Npm (extensible for future package managers)
 
-### Phase 3: Analysis and Plugin System
+### Phase 4: Define tool for analyzing dependencies
 
-**Step 4: Design plugin system architecture**
+- `analyzeDependencies()`
+  - name: analyzeDependencyInfo
+  - description: Runs the commands to get the outdated and vulnerable dependencies and analyze and organism them into the status.md file for the given package manager
+  - description:
+    1. Loads the registered plugin for that package manager e.g. packages/mcp/src/plugins/{packageManager}/PackageManagerPlugin.ts
+    2. Calls IPackageManagerPlugin.getDependencyInfo() which creates output file .dependency-doctor/{packageManager}/dependency-info.json
+    3. Create a resource that points to the file path from the previous step e.g. /:packageManager/dependency-info.json
+    4. Calls IPackageManagerPlugin.analyzeDependencyInfo() which creates output file .dependency-doctor/{packageManager}/status.md
+    5. Create a resource that is the file path from the previous step e.g. /:packageManager/status.md
+  - inputs:
+    packageManager: PackageManager (enum)
+  - output:
+    - file created: .dependency-doctor/{packageManager}/dependency-info.json
+    - file created: .dependency-doctor/{packageManager}/status.md
+    - resource: /:packageManager/dependency-info.json
+    - resource: /:packageManager/status.md
 
-- [ ] Create `src/plugins/IPackageManagerPlugin.ts` interface
-- [ ] Define plugin contract with methods:
-  - `collectRawData()` - fetch npm outdated and audit JSON
-  - `transformToGeneric()` - convert raw npm data to DependencyInfo[]
-- [ ] Create `src/services/IPluginRegistry.ts` and implementation for plugin management
-- [ ] Create `src/plugins/IPackageManagerPlugin.test.ts` - test plugin interface contract
+### Phase 3: Add basic project settings infra
 
-**Step 5: Implement npm plugin**
+In this phase we will establish the patterns and build out a project config system so that users can set project and package manager specific details as well as a folder where dependency doctor ouputs can go. This will be something like
 
-- [ ] Create `src/plugins/npm/NpmPlugin.ts` implementing IPackageManagerPlugin
-- [ ] Implement npm command execution using `execa`
-- [ ] Implement transformation from npm JSON to DependencyInfo[]
-- [ ] Map npm vulnerability data to generic SecurityInfo structure
-- [ ] Create `src/plugins/npm/NpmPlugin.test.ts` - unit tests with mocked command execution
+```bash
+.dependency-doctor/
+  npm/
+    dependency-info.json # output from
+    status.md # t
+  settings.json # top level dependency doctor settings that are represented by packages/mcp/src/models/ProjectConfiguation.ts
+```
 
-**Step 6: Create dependency service**
+For this phase we need to:
 
-- [ ] Create `src/services/IDependencyService.ts` interface
-- [ ] Create `src/services/DependencyService.ts` implementation
-- [ ] Implement `collect()` method that:
-  - Uses plugin to collect raw data
-  - Uses plugin to transform to generic format
-  - Returns DependencyCollection
-- [ ] Create `src/services/DependencyService.test.ts` - unit tests with mocked plugins
+1. Create a way to init a project which will create the file in the current project folder (relative to the npm package that dependency doctor is installed in) .dependency-doctor/settings.json by running `npx @dependency-doctor/mcp init`
+1. Complete the modeling in packages/mcp/src/models/ProjectConfiguration.ts so we can have the user have a settings file like this for ea
 
-### Phase 4: Templates and Resources
+   ```json
+   {
+     // top level settings here
+     "npm": {
+       // setting per PackageManager
+       "enabled": "true"
+     }
+   }
+   ```
 
-**Step 8: Create templates**
+1. Complete the repo packages/mcp/src/repository/projectConfig/ProjectConfigurationRepository.ts so it loads up the config file into memory this will be a singleton
+1. Register it in. the service container DI
 
-- [] Create the template for `templates/status.md` with proper structure for dependency groupings
-- [] Create the template for `templates/session-notes/analyze.md` for analysis sessions
-- [] Ensure templates align with the analyze workflow requirements - this will be used by the LLM really to update and just to copy over at the start when someone inits or whatever. Not really templating engine or anything yet
+### Phase 3: Complete plugin repository
 
-**Step 9: Create MCP resources**
+Next we will need to finish the plugin infrastructure which mainly means:
 
-- [] Resource: `package_json_files` - array of package.json file paths for the current directory
-- [] Resource: `dependency_doctor_config` - dependency doctor settings file (config.yml)
-- [] Resource: `status_document` - status.md file content
-- [] Resource: `raw_dependency_data` - raw npm output json
-- [] Resource: `analyzed_dependencies` - analyzed dependency json
-- [] Resource: `current_session_notes` - current session notes
-- [] Create `src/resources/McpResources.test.ts` - test resource discovery, access control, and data serialization (if testing makes sense here?)
+1. Finish the implmentation of packages/mcp/src/repository/pluginRepository/PackageManagerPluginRepository.ts so that it can be a singlton that has the registarted plugins for the values in PackageManger. For now we will just have npm.
+1. Register it in. the service container DI
 
-**Step 10: Create MCP analyze tool**
+### Phase 4: Implement npm plugin
 
-- [] Create `src/tools/analyze-dependencies.ts`
-- [] Implement `analyze` tool that does the whole analyze flow:
-  - Creates .dependency-doctor/ workspace structure
-  - Runs dependency analysis via IDependencyService
-  - Updates all workspace files (raw.json, analyzed.json, status.md)
-  - Creates session notes from template
-  - Updates the templates and resources
-  - Returns analysis summary
-- [] Create `src/tools/analyze-dependencies.test.ts` - unit tests with mocked dependencies and file operations
+TBC
 
-### Phase 5: UX and Workflow
-
-**Step 11: Create prompts and workflow**
-
-- [] Create MCP prompt for going through the analyze process
-- [] Add user interaction for configuration and approval
-- [] Integrate with dependency injection and logging setup from reference project pattern
-- [] Create `src/prompts/AnalyzeWorkflow.test.ts` - test prompt generation and user interaction flows
-
-## Execution notes
-
-### Phase 1: Infrastructure Setup ✅ COMPLETED
-
-**Step 1: Set up dependency injection infrastructure**
-
-- ✅ Added tsyringe, pino, reflect-metadata dependencies to package.json
-- ✅ Created ServiceConfiguration.ts with DI container setup and pino logger configuration
-- ✅ Created InjectionTokens.ts enum for type-safe dependency injection tokens
-- ✅ Set up reflect-metadata import in ServiceConfiguration.ts
-- ✅ Skipped individual test files for tokens and service config as agreed
-
-**Step 2: Create abstraction interfaces**
-
-- ✅ Created IFileSystem.ts interface for file operations (already existed)
-- ✅ Created FileSystem.ts implementation using Node.js fs promises with @injectable decorator
-- ✅ ~~Created IChildProcess.ts interface extending Node.js ExecOptions for type safety~~ (Replaced with execa)
-- ✅ ~~Created ChildProcess.ts simplified implementation using promisified exec~~ (Replaced with execa)
-- ✅ Added `execa` package for better shell command execution DX
-- ✅ Removed custom ChildProcess implementation and all related files and DI registrations
-- ✅ Registered remaining implementations in ServiceConfiguration DI container
-- ✅ ~~Created basic tests for ChildProcess class with vitest setup~~ (Removed with ChildProcess)
-- ✅ Set up test infrastructure with setupTests.ts and vitest configuration
-- ✅ Fixed root-level test script to work conveniently from workspace root
-
-**Infrastructure Status**: All Phase 1 tasks complete. Build ✅, Tests ✅ (8/8 passing), TypeScript ✅
-
-### Phase 2: Data Models and Architecture 🚧 IN PROGRESS
-
-**Step 3: Define data models**
-
-- ✅ Created AppError.ts custom error class with `fromError()` and `fromUnknown()` static methods
-- ✅ Created AppError.test.ts with comprehensive test coverage using whole-object assertion pattern
-- ✅ Updated ChildProcess usage to use new AppError class before removal
-- ✅ PackageInformation.ts already exists with UpgradeType enum integration
+### Phase 5:

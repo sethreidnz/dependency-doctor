@@ -8,17 +8,14 @@ export const schema = {
 
 // Define tool metadata
 export const metadata: ToolMetadata = {
-  name: "greet",
-  description: "Greet the user",
-  annotations: {
-    title: "Greet the user",
-    readOnlyHint: true,
-    destructiveHint: false,
-    idempotentHint: true,
-  },
+  name: "getDependencyInfo",
+  description:
+    "Gets the dependency information for a given package manager in the current project",
 };
 
 // Tool implementation
-export default function greet({ name }: InferSchema<typeof schema>) {
-  return `Hello, ${name}!!`;
+export default function getDependencyInfo({
+  name,
+}: InferSchema<typeof schema>) {
+  throw new Error("Not implemented yet");
 }

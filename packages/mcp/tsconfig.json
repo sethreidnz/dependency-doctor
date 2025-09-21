@@ -4,5 +4,12 @@
     "module": "commonjs",
     "outDir": "./dist"
   },
-  "include": ["xmcp-env.d.ts", "xmcp.config.ts", "vitest.config.ts", "setupTests.ts", "src/**/*.ts"]
+  "include": [
+    "xmcp-env.d.ts",
+    "xmcp.config.ts",
+    "vitest.config.ts",
+    "setupTests.ts",
+    "src/**/*.ts"
+  ],
+  "types": ["vitest/globals", "vite/client", "vite-plugin-svgr/client", "node"]
 }
