@@ -18,7 +18,6 @@ export default [
     },
     rules: {
       // Add any package-specific rule overrides here
-      // Example: '@typescript-eslint/no-explicit-any': 'off'
     }
   }
 ];

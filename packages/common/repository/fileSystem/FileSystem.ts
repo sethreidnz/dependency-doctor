@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { readFileSync, existsSync, statSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { injectable } from 'tsyringe';
 import { IFileSystem } from './IFileSystem.js';
 

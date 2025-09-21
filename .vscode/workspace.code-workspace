@@ -21,7 +21,15 @@
     "typescript.preferences.includePackageJsonAutoImports": "on",
     "typescript.workspaceSymbols.scope": "allOpenProjects",
     "npm.packageManager": "npm",
-    "npm.runSilent": true
+    "npm.runSilent": true,
+    "eslint.workingDirectories": [
+      { "directory": "./packages/common" },
+      { "directory": "./packages/mcp" },
+      { "directory": "./packages/cli" },
+      { "directory": "." }
+    ],
+    "eslint.format.enable": true,
+    "eslint.lintTask.enable": true
   },
   "extensions": {
     "recommendations": [

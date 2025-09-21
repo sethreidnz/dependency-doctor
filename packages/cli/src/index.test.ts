@@ -6,17 +6,17 @@ import { PackageManager } from "@dependency-doctor/common/enums/PackageManager.j
 import type { DependencyContainer } from "tsyringe";
 
 // Create a properly typed mock using vi.mocked
-const mockFileSystem: MockedObject<IFileSystem> = {
+const fileSystemMock: MockedObject<IFileSystem> = {
   readFile: vi.fn(),
   writeFile: vi.fn(),
   deleteFile: vi.fn(),
   fileExists: vi.fn(),
-  readJsonFile: vi.fn() as MockedObject<IFileSystem>['readJsonFile'],
+  readJsonFile: vi.fn() as MockedObject<IFileSystem>["readJsonFile"],
   mkdir: vi.fn(),
   directoryExists: vi.fn(),
   readFileSync: vi.fn(),
   fileExistsSync: vi.fn(),
-  readJsonFileSync: vi.fn() as MockedObject<IFileSystem>['readJsonFileSync'],
+  readJsonFileSync: vi.fn() as MockedObject<IFileSystem>["readJsonFileSync"],
 };
 
 describe("CLI Package", () => {
@@ -27,7 +27,7 @@ describe("CLI Package", () => {
     container = configureServices();
 
     // Override the FileSystem with our mock
-    container.registerInstance(InjectionTokens.FileSystem, mockFileSystem);
+    container.registerInstance(InjectionTokens.FileSystem, fileSystemMock);
   });
 
   describe("ServiceConfiguration", () => {
@@ -39,7 +39,7 @@ describe("CLI Package", () => {
       const fileSystem = container.resolve<IFileSystem>(
         InjectionTokens.FileSystem
       );
-      expect(fileSystem).toBe(mockFileSystem);
+      expect(fileSystem).toBe(fileSystemMock);
     });
   });
 
@@ -49,7 +49,7 @@ describe("CLI Package", () => {
       const fileSystem = container.resolve<IFileSystem>(
         InjectionTokens.FileSystem
       );
-      mockFileSystem.fileExists.mockResolvedValue(true);
+      fileSystemMock.fileExists.mockResolvedValue(true);
 
       // act
       const settingsExists = await fileSystem.fileExists(
@@ -59,7 +59,7 @@ describe("CLI Package", () => {
       // assert
       expect(settingsExists).toBe(true);
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockFileSystem.fileExists).toHaveBeenCalledWith(
+      expect(fileSystemMock.fileExists).toHaveBeenCalledWith(
         ".dependency-doctor/settings.json"
       );
     });
@@ -69,9 +69,9 @@ describe("CLI Package", () => {
       const fileSystem = container.resolve<IFileSystem>(
         InjectionTokens.FileSystem
       );
-      mockFileSystem.fileExists.mockResolvedValue(false);
-      mockFileSystem.mkdir.mockResolvedValue(undefined);
-      mockFileSystem.writeFile.mockResolvedValue(undefined);
+      fileSystemMock.fileExists.mockResolvedValue(false);
+      fileSystemMock.mkdir.mockResolvedValue(undefined);
+      fileSystemMock.writeFile.mockResolvedValue(undefined);
 
       const expectedSettings = {
         version: "1.0.0", // This would normally come from package.json
@@ -90,16 +90,16 @@ describe("CLI Package", () => {
 
       // assert
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockFileSystem.mkdir).toHaveBeenCalledWith(".dependency-doctor", {
+      expect(fileSystemMock.mkdir).toHaveBeenCalledWith(".dependency-doctor", {
         recursive: true,
       });
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockFileSystem.mkdir).toHaveBeenCalledWith(
+      expect(fileSystemMock.mkdir).toHaveBeenCalledWith(
         ".dependency-doctor/npm",
         { recursive: true }
       );
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      expect(mockFileSystem.writeFile).toHaveBeenCalledWith(
+      expect(fileSystemMock.writeFile).toHaveBeenCalledWith(
         ".dependency-doctor/settings.json",
         JSON.stringify(expectedSettings, null, 2)
       );

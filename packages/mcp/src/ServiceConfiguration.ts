@@ -16,17 +16,23 @@ const CONFIG_FILE_PATH = ".dependency-doctor/settings.json";
  */
 function loadProjectConfiguration(): ProjectConfigurationJson {
   const fileSystem = new FileSystem();
-  
+
   try {
     const configExists = fileSystem.fileExistsSync(CONFIG_FILE_PATH);
-    
+
     if (!configExists) {
       return getDefaultConfiguration();
     }
 
-    return fileSystem.readJsonFileSync<ProjectConfigurationJson>(CONFIG_FILE_PATH);
+    return fileSystem.readJsonFileSync<ProjectConfigurationJson>(
+      CONFIG_FILE_PATH
+    );
   } catch (error) {
-    console.warn(`Failed to load configuration file: ${error instanceof Error ? error.message : 'Unknown error'}. Using default configuration.`);
+    console.warn(
+      `Failed to load configuration file: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }. Using default configuration.`
+    );
     return getDefaultConfiguration();
   }
 }
@@ -52,7 +58,7 @@ function getDefaultConfiguration(): ProjectConfigurationJson {
  * @returns The configured dependency injection container
  */
 export function configureServices(
-  logLevel: string = process.env.LOG_LEVEL || "info",
+  logLevel: string = process.env.LOG_LEVEL || "info"
 ): DependencyContainer {
   container.clearInstances();
 
@@ -76,7 +82,7 @@ export function configureServices(
               },
             }
           : undefined,
-    }),
+    })
   );
 
   // Register infrastructure services
@@ -84,7 +90,10 @@ export function configureServices(
 
   // Register business services with pre-loaded config
   const projectConfigRepo = new ProjectConfigRepository(config);
-  container.registerInstance<IProjectConfigRepository>(InjectionTokens.ProjectConfigRepository, projectConfigRepo);
+  container.registerInstance<IProjectConfigRepository>(
+    InjectionTokens.ProjectConfigRepository,
+    projectConfigRepo
+  );
 
   return container;
 }
