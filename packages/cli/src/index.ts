@@ -32,7 +32,7 @@ program
         console.log(`Settings file exists: ${settingsFile}`);
         return;
       } catch {
-        // File doesn't exist, continue with initialization
+        console.log(`Settings file does not exist: ${settingsFile}`);
       }
 
       // Create directory structure
