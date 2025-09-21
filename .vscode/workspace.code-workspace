@@ -5,8 +5,16 @@
       "path": "."
     },
     {
+      "name": "@dependency-doctor/common",
+      "path": "./packages/common"
+    },
+    {
       "name": "@dependency-doctor/mcp",
       "path": "./packages/mcp"
+    },
+    {
+      "name": "@dependency-doctor/cli",
+      "path": "./packages/cli"
     }
   ],
   "settings": {

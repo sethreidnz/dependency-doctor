@@ -2,9 +2,15 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    // Package-specific test configuration
+    globals: true,
+    environment: 'node',
+    setupFiles: ['reflect-metadata'],
     include: ["src/**/*.{test,spec}.{js,ts,tsx}"],
-    setupFiles: ["./setupTests.ts"],
+    exclude: [
+      'node_modules/**',
+      'dist/**',
+      '.xmcp/**'
+    ],
     alias: {
       // Add any package-specific aliases
       "@": "./src",

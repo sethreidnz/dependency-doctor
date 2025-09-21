@@ -1,12 +1,18 @@
 {
   "extends": "./tsconfig.base.json",
   "files": [],
-  "references": [
-    {
-      "path": "./packages/mcp"
-    }
-  ],
   "compilerOptions": {
     "composite": true
-  }
+  },
+  "references": [
+    {
+      "path": "./packages/common"
+    },
+    {
+      "path": "./packages/mcp"
+    },
+    {
+      "path": "./packages/cli"
+    }
+  ]
 }

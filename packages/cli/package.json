@@ -11,11 +11,15 @@
     "test": "vitest"
   },
   "dependencies": {
-    "commander": "^14.0.1"
+    "@dependency-doctor/common": "*",
+    "commander": "^14.0.1",
+    "pino": "^9.5.0",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.8.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "vitest": "^2.0.0"
+    "typescript": "*",
+    "vitest": "*"
   },
   "main": "./dist/index.js",
   "bin": {

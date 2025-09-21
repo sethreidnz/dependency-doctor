@@ -11,12 +11,14 @@
   "dictionaries": ["project-words"],
   "ignorePaths": [
     "node_modules/**",
+    "packages/*/node_modules/**",
     "dist/**",
     "packages/*/dist/**",
     "**/coverage/**",
     ".xmcp/**",
     ".eslintcache",
     "package-lock.json",
+    "**/package-lock.json",
     "/project-words.txt"
   ]
 }

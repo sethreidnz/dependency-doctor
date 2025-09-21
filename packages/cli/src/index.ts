@@ -1,8 +1,10 @@
 import { Command } from "commander";
-import fs from "fs/promises";
 import path from "path";
-import { PackageManager } from "@dependency-doctor/common/enums/PackageManager";
-import { ProjectConfigurationJson } from "@dependency-doctor/common/models/ProjectConfiguration";
+import { PackageManager } from "@dependency-doctor/common/enums/PackageManager.js";
+import { ProjectConfigurationJson } from "@dependency-doctor/common/models/ProjectConfiguration.js";
+import { InjectionTokens } from "@dependency-doctor/common/enums/InjectionTokens.js";
+import type { IFileSystem } from "@dependency-doctor/common/repository/fileSystem/IFileSystem.js";
+import { ServiceContainer } from "./ServiceConfiguration.js";
 import packageJson from "../package.json";
 
 const program = new Command();
@@ -17,6 +19,7 @@ program
   .description("Initialize Dependency Doctor in the current project")
   .action(async () => {
     try {
+      const fileSystem = ServiceContainer.resolve<IFileSystem>(InjectionTokens.FileSystem);
       const cwd = process.cwd();
       const dependencyDoctorDir = path.join(cwd, ".dependency-doctor");
       const settingsFile = path.join(dependencyDoctorDir, "settings.json");
@@ -24,23 +27,23 @@ program
       console.log("🔧 Initializing Dependency Doctor...");
 
       // Check if already initialized
-      try {
-        await fs.access(settingsFile);
+      const settingsExists = await fileSystem.fileExists(settingsFile);
+      if (settingsExists) {
         console.log(
           "⚠️  Dependency Doctor is already initialized in this project"
         );
         console.log(`Settings file exists: ${settingsFile}`);
         return;
-      } catch {
-        console.log(`Settings file does not exist: ${settingsFile}`);
       }
 
+      console.log(`Settings file does not exist: ${settingsFile}`);
+
       // Create directory structure
-      await fs.mkdir(dependencyDoctorDir, { recursive: true });
+      await fileSystem.mkdir(dependencyDoctorDir, { recursive: true });
 
       // Create npm subdirectory for future output files
       const npmDir = path.join(dependencyDoctorDir, "npm");
-      await fs.mkdir(npmDir, { recursive: true });
+      await fileSystem.mkdir(npmDir, { recursive: true });
 
       // Create default project configuration
       const defaultSettings: ProjectConfigurationJson = {
@@ -51,7 +54,7 @@ program
       };
 
       // Write settings file
-      await fs.writeFile(
+      await fileSystem.writeFile(
         settingsFile,
         JSON.stringify(defaultSettings, null, 2)
       );

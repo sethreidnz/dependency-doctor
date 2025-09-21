@@ -27,7 +27,9 @@
   },
   "devDependencies": {
     "esbuild": "^0.25.9",
-    "swc-loader": "^0.2.6"
+    "swc-loader": "^0.2.6",
+    "typescript": "*",
+    "vitest": "*"
   },
   "main": "./dist/stdio.js",
   "files": [

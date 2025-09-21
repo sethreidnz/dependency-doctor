@@ -11,6 +11,7 @@ export const InjectionTokens = {
   // Business services
   DependencyService: Symbol.for("DependencyService"),
   PluginRegistry: Symbol.for("PluginRegistry"),
+  ProjectConfigRepository: Symbol.for("ProjectConfigRepository"),
 
   // Package manager plugins
   NpmPlugin: Symbol.for("NpmPlugin"),

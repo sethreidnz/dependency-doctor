@@ -83,40 +83,39 @@ Each step should include using test driven development TDD:
 
 ### Phase 3: Add basic project settings infra
 
-In this phase we will establish the patterns and build out a project config system so that users can set project and package manager specific details as well as a folder where dependency doctor ouputs can go. This will be something like
+In this phase we will establish the patterns and build out a project config system so that users can set project and package manager specific details as well as a folder where dependency doctor outputs can go. This will be something like
 
 ```bash
 .dependency-doctor/
   npm/
     dependency-info.json # output from
     status.md # t
-  settings.json # top level dependency doctor settings that are represented by packages/mcp/src/models/ProjectConfiguation.ts
+  settings.json # top level dependency doctor settings that are represented by packages/mcp/src/models/ProjectConfiguration.ts
 ```
 
 For this phase we need to:
 
-1. Create a way to init a project which will create the file in the current project folder (relative to the npm package that dependency doctor is installed in) .dependency-doctor/settings.json by running `npx @dependency-doctor/mcp init`
-1. Complete the modeling in packages/mcp/src/models/ProjectConfiguration.ts so we can have the user have a settings file like this for ea
+1. [x] Create a way to init a project which will create the file in the current project folder (relative to the npm package that dependency doctor is installed in) .dependency-doctor/settings.json by running `npx @dependency-doctor/mcp init`
+1. [x] Complete the modeling in packages/mcp/src/models/ProjectConfiguration.ts so we can have the user have a settings file like this for ea
 
    ```json
    {
-     // top level settings here
+     "version": "1.0.0",
      "npm": {
-       // setting per PackageManager
        "enabled": "true"
      }
    }
    ```
 
-1. Complete the repo packages/mcp/src/repository/projectConfig/ProjectConfigurationRepository.ts so it loads up the config file into memory this will be a singleton
-1. Register it in. the service container DI
+1. [ ] Complete the repo packages/mcp/src/repository/projectConfig/ProjectConfigurationRepository.ts so it loads up the config file into memory this will be a singleton
+1. [ ] Register it in. the service container DI
 
 ### Phase 3: Complete plugin repository
 
 Next we will need to finish the plugin infrastructure which mainly means:
 
-1. Finish the implmentation of packages/mcp/src/repository/pluginRepository/PackageManagerPluginRepository.ts so that it can be a singlton that has the registarted plugins for the values in PackageManger. For now we will just have npm.
-1. Register it in. the service container DI
+1. [ ] Finish the implementation of packages/mcp/src/repository/pluginRepository/PackageManagerPluginRepository.ts so that it can be a singleton that has the registered plugins for the values in PackageManager. For now we will just have npm.
+1. [ ] Register it in. the service container DI
 
 ### Phase 4: Implement npm plugin
 
