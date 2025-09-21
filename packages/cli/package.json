@@ -19,7 +19,7 @@
   },
   "main": "./dist/index.js",
   "bin": {
-    "dependency-doctor": "./dist/cli.js"
+    "dependency-doctor": "./dist/index.js"
   },
   "files": [
     "dist"

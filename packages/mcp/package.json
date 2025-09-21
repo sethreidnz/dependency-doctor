@@ -7,9 +7,7 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "build": "npm run build:mcp && npm run build:cli",
-    "build:mcp": "xmcp build",
-    "build:cli": "tsc",
+    "build": "xmcp build",
     "dev": "xmcp dev",
     "start": "node dist/stdio.js",
     "test": "vitest",
@@ -17,6 +15,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@dependency-doctor/cli": "*",
     "commander": "^14.0.1",
     "execa": "^9.6.0",
     "pino": "^9.5.0",
@@ -33,8 +32,5 @@
   "main": "./dist/stdio.js",
   "files": [
     "dist"
-  ],
-  "bin": {
-    "dependency-doctor": "./dist/cli.js"
-  }
+  ]
 }
